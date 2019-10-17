@@ -9,14 +9,16 @@ install_docker(){
 	yum -y install docker-ce
 	systemctl start docker
 	systemctl enable docker
-
+	echo "安装成功"
+	start_menu
 }
 
 install_dockercompose(){
 	
 	curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 	chmod +x /usr/local/bin/docker-compose
-
+	echo "安装成功"
+	start_menu
 }
 
 
@@ -40,6 +42,8 @@ services:
 EOF
 	
 	docker-compose up -d
+	echo "安装成功"
+	start_menu
 }
 
 install_ssr(){
@@ -116,7 +120,8 @@ services:
 EOF
 	
 	docker-compose up -d
-	
+	echo "安装成功"
+	start_menu
 }
 
 start_menu(){
