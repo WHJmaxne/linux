@@ -10,6 +10,7 @@ install_docker(){
 	systemctl start docker
 	systemctl enable docker
 	echo "安装成功"
+	sleep 5s
 	start_menu
 }
 
@@ -18,6 +19,7 @@ install_dockercompose(){
 	curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 	chmod +x /usr/local/bin/docker-compose
 	echo "安装成功"
+	sleep 5s
 	start_menu
 }
 
@@ -43,6 +45,7 @@ EOF
 	
 	docker-compose up -d
 	echo "安装成功"
+	sleep 5s
 	start_menu
 }
 
@@ -121,11 +124,11 @@ EOF
 	
 	docker-compose up -d
 	echo "安装成功"
+	sleep 5s
 	start_menu
 }
 
 start_menu(){
-    clear
     echo "========================="
     echo " 介绍：适用于CentOS7"
     echo " 作者：whjmaxne"
@@ -162,5 +165,5 @@ start_menu(){
 		;;
     esac
 }
-
+clear
 start_menu
