@@ -118,3 +118,42 @@ EOF
 	docker-compose up -d
 	
 }
+
+start_menu(){
+    clear
+    echo "========================="
+    echo " 介绍：适用于CentOS7"
+    echo " 作者：whjmaxne"
+    echo " 邮箱：whjmaxne@outlook.com"
+    echo "========================="
+    echo "1. 安装docker"
+    echo "2. 安装docker-compose"
+    echo "3. 安装nginx"
+    echo "4. 安装ssr"
+	echo "5. 退出"
+    echo
+    read -p "请输入数字:" num
+    case "$num" in
+    	1)
+		install_docker
+		;;
+		2)
+		install_dockercompose
+		;;
+		3)
+		install_nginx
+		;;
+		4)
+		install_ssr
+		;;
+		5)
+		exit 1
+		;;
+		*)
+		clear
+		echo "请输入正确数字"
+		sleep 5s
+		start_menu
+		;;
+    esac
+}
