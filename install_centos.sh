@@ -52,7 +52,7 @@ install_ssr(){
     "server_port":9000,
     "local_address":"127.0.0.1",
     "local_port":1080,
-    "password":"password",
+    "password":"password1",
     "timeout":120,
     "method":"aes-256-cfb",
     "protocol":"origin",
@@ -70,7 +70,7 @@ EOF
 	read -p "请输入密码：" mypassword
 	
 	sed -i "s/9000/$myport/" config.json
-	sed -i "s/password/$mypassword/" config.json
+	sed -i "s/password1/$mypassword/" config.json
 	
 	
 	cat > Dockerfile <<-EOF
