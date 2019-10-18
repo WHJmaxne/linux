@@ -173,6 +173,9 @@ EOF
 }
 
 install_ngrok(){
+  if [ ! -d "/opt/nginx/conf.d" ];then
+    echo "请安装nginx!"
+  else
   mkdir -p /opt/ngrok/bin
   cd /opt/ngrok
   read -p "请输入域名：" domain
@@ -237,6 +240,7 @@ EOF
   docker exec -it ngrok_ngrok_1 cp -r /ngrok/bin/* /var/ngrok
   echo "安装成功"
 	start_menu
+  fi
 }
 
 remove_ngrok(){
