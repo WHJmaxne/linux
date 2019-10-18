@@ -42,7 +42,7 @@ services:
 EOF
 	
 	docker-compose up -d
-	sleep 5s
+	echo "安装成功"
 	start_menu
 }
 
