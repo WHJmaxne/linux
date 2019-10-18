@@ -10,7 +10,6 @@ install_docker(){
 	systemctl start docker
 	systemctl enable docker
 	echo "安装成功"
-	sleep 5s
 	start_menu
 }
 
@@ -19,7 +18,6 @@ install_dockercompose(){
 	curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 	chmod +x /usr/local/bin/docker-compose
 	echo "安装成功"
-	sleep 5s
 	start_menu
 }
 
@@ -44,7 +42,6 @@ services:
 EOF
 	
 	docker-compose up -d
-	echo "安装成功"
 	sleep 5s
 	start_menu
 }
@@ -124,7 +121,6 @@ EOF
 	
 	docker-compose up -d
 	echo "安装成功"
-	sleep 5s
 	start_menu
 }
 
@@ -133,7 +129,6 @@ remove_nginx(){
 	docker-compose down --rmi all
 	rm -rf /opt/nginx/*
 	echo "卸载成功"
-	sleep 5s
 	start_menu
 }
 
@@ -142,7 +137,6 @@ remove_ssr(){
 	docker-compose down --rmi all
 	rm -rf /opt/shadowsocksr/*
 	echo "卸载成功"
-	sleep 5s
 	start_menu
 }
 
