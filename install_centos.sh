@@ -276,6 +276,8 @@ start_menu(){
     echo "4. 卸载nginx"
     echo "5. 安装ssr"
     echo "6. 卸载ssr"
+    echo "7. 安装ngrok"
+    echo "8. 卸载ngrok"
     echo "999. 退出"
     echo
     read -p "请输入数字:" num
@@ -297,6 +299,12 @@ start_menu(){
 		;;
 		6)
 		remove_ssr
+		;;
+    7)
+		install_ngrok
+		;;
+		8)
+		remove_ngrok
 		;;
 		999)
 		exit 1
