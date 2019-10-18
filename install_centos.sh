@@ -172,6 +172,82 @@ EOF
 	start_menu
 }
 
+install_ngrok(){
+  mkdir -p /opt/ngrok/bin
+  cd /opt/ngrok
+  read -p "请输入域名：" domain
+  cat > build.sh <<-EOF
+export NGROK_DOMAIN="$domain"
+cd /ngrok/
+openssl genrsa -out rootCA.key 2048
+openssl req -x509 -new -nodes -key rootCA.key -subj "/CN=$NGROK_DOMAIN" -days 5000 -out rootCA.pem
+openssl genrsa -out device.key 2048
+openssl req -new -key device.key -subj "/CN=$NGROK_DOMAIN" -out device.csr
+openssl x509 -req -in device.csr -CA rootCA.pem -CAkey rootCA.key -CAcreateserial -out device.crt -days 5000
+cp rootCA.pem assets/client/tls/ngrokroot.crt
+cp device.crt assets/server/tls/snakeoil.crt
+cp device.key assets/server/tls/snakeoil.key
+
+make release-server
+GOOS=linux GOARCH=386 make release-client
+GOOS=linux GOARCH=amd64 make release-client
+GOOS=windows GOARCH=386 make release-client
+GOOS=windows GOARCH=amd64 make release-client
+GOOS=darwin GOARCH=386 make release-client
+GOOS=darwin GOARCH=amd64 make release-client
+GOOS=linux GOARCH=arm make release-client
+
+mkdir -p /var/ngrok
+cp -r /ngrok/bin/* /var/ngrok
+EOF
+  cat > Dockerfile <<-EOF
+FROM golang:1.7.1-alpine
+ADD build.sh /
+RUN apk add --no-cache git make openssl
+RUN git clone https://github.com/inconshreveable/ngrok.git --depth=1 /ngrok
+RUN sh /build.sh
+EXPOSE 8081
+VOLUME [ "/ngrok" ]
+CMD [ "/ngrok/bin/ngrokd"]
+EOF
+  cat > docker-compose.yml <<-EOF
+version: '3'
+
+services:
+    ngrok:
+      networks: 
+        - app
+      restart: always
+      build:
+        context: .
+        dockerfile: Dockerfile
+      ports:
+        - 8081:8081
+        - 4443:4443
+      command:
+        - /ngrok/bin/ngrokd
+        - -domain=ngrok.maxne.club
+        - -httpAddr=:8081
+      volumes:
+        - ./bin:/var/ngrok
+
+networks:
+   app:
+     driver: bridge
+EOF
+  docker-compose up -d
+  echo "安装成功"
+	start_menu
+}
+
+remove_ngrok)(){
+  cd /opt/ngrok
+  docker-compose down --rmi all
+	rm -rf /opt/ngrok/*
+	echo "卸载成功"
+	start_menu
+}
+
 remove_nginx(){
 	cd /opt/nginx
 	docker-compose down --rmi all
