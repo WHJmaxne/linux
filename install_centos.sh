@@ -174,7 +174,8 @@ EOF
 
 install_ngrok(){
   if [ ! -d "/opt/nginx/conf.d" ];then
-    echo "请安装nginx!"
+    echo "请先安装nginx!"
+    start_menu
   else
   mkdir -p /opt/ngrok/bin
   cd /opt/ngrok
@@ -241,6 +242,7 @@ EOF
 
   server_name='~^(?<subdomain>\w+).'${domain}'$'
   server_name=${server_name//./\\.}
+  host='$host'
   localip=`ifconfig -a|grep inet|grep -v 127.0.0.1|grep -v inet6|awk '{print $2}'|tr -d "addr:"|head -n 1`
   cat > /opt/nginx/conf.d/ngrok.conf <<-EOF
 server {
