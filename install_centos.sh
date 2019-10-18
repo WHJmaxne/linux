@@ -240,7 +240,7 @@ EOF
 	start_menu
 }
 
-remove_ngrok)(){
+remove_ngrok(){
   cd /opt/ngrok
   docker-compose down --rmi all
 	rm -rf /opt/ngrok/*
