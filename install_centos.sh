@@ -130,7 +130,7 @@ EOF
 
 remove_nginx(){
 	cd /opt/nginx
-	docker-compose dowm --rmi all
+	docker-compose down --rmi all
 	rm -rf /opt/nginx/*
 	echo "卸载成功"
 	sleep 5s
@@ -139,7 +139,7 @@ remove_nginx(){
 
 remove_ssr(){
 	cd /opt/shadowsocksr
-	docker-compose dowm --rmi all
+	docker-compose down --rmi all
 	rm -rf /opt/shadowsocksr/*
 	echo "卸载成功"
 	sleep 5s
