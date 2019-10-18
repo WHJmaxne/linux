@@ -278,7 +278,7 @@ start_menu(){
     echo "6. 卸载ssr"
     echo "7. 安装ngrok"
     echo "8. 卸载ngrok"
-    echo "999. 退出"
+    echo "99. 退出"
     echo
     read -p "请输入数字:" num
     case "$num" in
@@ -306,7 +306,7 @@ start_menu(){
 		8)
 		remove_ngrok
 		;;
-		999)
+		99)
 		exit 1
 		;;
 		*)
