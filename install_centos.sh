@@ -128,6 +128,24 @@ EOF
 	start_menu
 }
 
+remove_nginx(){
+	cd /opt/nginx
+	docker-compose dowm --rmi all
+	rm -rf /opt/nginx/*
+	echo "卸载成功"
+	sleep 5s
+	start_menu
+}
+
+remove_ssr(){
+	cd /opt/shadowsocksr
+	docker-compose dowm --rmi all
+	rm -rf /opt/shadowsocksr/*
+	echo "卸载成功"
+	sleep 5s
+	start_menu
+}
+
 start_menu(){
     echo "========================="
     echo " 介绍：适用于CentOS7"
@@ -137,8 +155,10 @@ start_menu(){
     echo "1. 安装docker"
     echo "2. 安装docker-compose"
     echo "3. 安装nginx"
-    echo "4. 安装ssr"
-    echo "5. 退出"
+    echo "4. 卸载nginx"
+    echo "5. 安装ssr"
+    echo "6. 卸载ssr"
+    echo "999. 退出"
     echo
     read -p "请输入数字:" num
     case "$num" in
@@ -152,9 +172,15 @@ start_menu(){
 		install_nginx
 		;;
 		4)
-		install_ssr
+		remove_nginx
 		;;
 		5)
+		install_ssr
+		;;
+		6)
+		remove_ssr
+		;;
+		999)
 		exit 1
 		;;
 		*)
