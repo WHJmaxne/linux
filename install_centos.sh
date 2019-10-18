@@ -197,7 +197,6 @@ GOOS=darwin GOARCH=amd64 make release-client
 GOOS=linux GOARCH=arm make release-client
 
 mkdir -p /var/ngrok
-cp -r /ngrok/bin/* /var/ngrok
 EOF
   cat > Dockerfile <<-EOF
 FROM golang:1.7.1-alpine
@@ -235,6 +234,7 @@ networks:
      driver: bridge
 EOF
   docker-compose up -d
+  docker exec -it ngrok_ngrok_1 cp -r /ngrok/bin/* /var/ngrok
   echo "安装成功"
 	start_menu
 }
