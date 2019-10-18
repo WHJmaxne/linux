@@ -179,6 +179,8 @@ install_ngrok(){
   mkdir -p /opt/ngrok/bin
   cd /opt/ngrok
   read -p "请输入域名：" domain
+  read -p "请输入外部端口：" outport
+  read -p "请输入nginx转发端口：" tranport
   cat > build.sh <<-EOF
 cd /ngrok/
 openssl genrsa -out rootCA.key 2048
@@ -207,7 +209,7 @@ ADD build.sh /
 RUN apk add --no-cache git make openssl
 RUN git clone https://github.com/inconshreveable/ngrok.git --depth=1 /ngrok
 RUN sh /build.sh
-EXPOSE 8081
+EXPOSE $tranport
 VOLUME [ "/ngrok" ]
 CMD [ "/ngrok/bin/ngrokd"]
 EOF
@@ -223,12 +225,12 @@ services:
         context: .
         dockerfile: Dockerfile
       ports:
-        - 8081:8081
-        - 4443:4443
+        - $tranport:$tranport
+        - $outport:4443
       command:
         - /ngrok/bin/ngrokd
-        - -domain=ngrok.maxne.club
-        - -httpAddr=:8081
+        - -domain=$domain
+        - -httpAddr=:$tranport
       volumes:
         - ./bin:/var/ngrok
 
@@ -236,8 +238,29 @@ networks:
    app:
      driver: bridge
 EOF
+
+  server_name='~^(?<subdomain>\w+).'${domain}'$'
+  server_name=${server_name//./\\.}
+  localip=`ifconfig -a|grep inet|grep -v 127.0.0.1|grep -v inet6|awk '{print $2}'|tr -d "addr:"|head -n 1`
+  cat > /opt/nginx/conf.d/ngrok.conf <<-EOF
+server {
+        server_name     $server_name;
+        listen 80;
+        keepalive_timeout 70;
+        proxy_set_header "Host" $host:$tranport;
+        location / {
+                proxy_pass_header Server;
+                proxy_redirect off;
+                proxy_pass http://$localip:$tranport;
+        }
+        access_log off;
+        log_not_found off;
+}
+EOF
+
   docker-compose up -d
   docker exec -it ngrok_ngrok_1 cp -r /ngrok/bin/* /var/ngrok
+  restart_nginx
   echo "安装成功"
 	start_menu
   fi
@@ -247,8 +270,15 @@ remove_ngrok(){
   cd /opt/ngrok
   docker-compose down --rmi all
 	rm -rf /opt/ngrok/*
+  rm -rf /opt/nginx/conf.d/ngrok.conf
+  restart_nginx
 	echo "卸载成功"
 	start_menu
+}
+
+restart_nginx(){
+  cd /opt/nginx
+  docker-compose restart
 }
 
 remove_nginx(){
