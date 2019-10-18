@@ -138,7 +138,7 @@ start_menu(){
     echo "2. 安装docker-compose"
     echo "3. 安装nginx"
     echo "4. 安装ssr"
-	echo "5. 退出"
+    echo "5. 退出"
     echo
     read -p "请输入数字:" num
     case "$num" in
@@ -158,7 +158,6 @@ start_menu(){
 		exit 1
 		;;
 		*)
-		clear
 		echo "请输入正确数字"
 		sleep 5s
 		start_menu
