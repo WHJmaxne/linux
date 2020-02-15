@@ -177,7 +177,7 @@ install_ngrok(){
     echo "请先安装nginx!"
     start_menu
   else
-  mkdir -p /opt/ngrok/bin
+  mkdir -p /opt/ngrok
   cd /opt/ngrok
   read -p "请输入域名：" domain
   read -p "请输入外部端口：" outport
@@ -232,8 +232,6 @@ services:
         - /ngrok/bin/ngrokd
         - -domain=$domain
         - -httpAddr=:$tranport
-      volumes:
-        - ./bin:/var/ngrok
 
 networks:
    app:
@@ -261,8 +259,8 @@ server {
 EOF
 
   docker-compose up -d
-  docker exec -it ngrok_ngrok_1 cp -r /ngrok/bin/* /var/ngrok
-  restart_nginx
+  docker exec -it nginx_nginx_1 -s reload
+  docker cp ngrok_ngrok_1:/ngrok/bin/ .
   echo "安装成功"
 	start_menu
   fi
